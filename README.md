@@ -1,97 +1,106 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Analog Clock Assessment
 
-# Getting Started
+A responsive React Native analog clock application built using React Native CLI and TypeScript without using any third-party analog clock libraries.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+The application displays a real-time analog clock, supports multiple time zones using the TimeZoneDB API, and provides offline functionality using SQLite local caching.
 
-## Step 1: Start Metro
+## Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+<ul>
+    <li>Real-time analog clock</li>
+    <li>Hour, minute, and second hands</li>
+    <li>Responsive UI for different screen sizes</li>
+    <li>Portrait and landscape orientation support</li>
+    <li>Timezone selection</li>
+    <li>Timezone data fetched from online API</li>
+    <li>Offline support using SQLite</li>
+    <li>Persisted selected timezone</li>
+    <li>Graceful fallback when offline</li>
+    <li>Clean and scalable project architecture</li>
+</ul>
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Tech Stack
 
-```sh
-# Using npm
-npm start
+<ul>
+    <li>React Native CLI</li>
+    <li>TypeScript</li>
+    <li>SQLite</li>
+    <li>Axios</li>
+    <li>React Hooks</li>
+    <li>TimeZoneDB API</li>
+</ul>
 
-# OR using Yarn
-yarn start
+## Implementation
+
+As we are not using any third party library for creating this clock, so we are
+using Mathematical formula for Clock Hand rotations:
+
+```
+Hour Angle   = (hours % 12) * 30 + minutes * 0.5
+Minute Angle = minutes * 6 + seconds * 0.1
+Second Angle = seconds * 6
 ```
 
-## Step 2: Build and run your app
+You can find this code inside <i><strong>/utils/clock.ts</strong></i>.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+We are also showing numbers of clock using Trignomatery methods:
 
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+Math.cos()
+Math.sin()
 ```
 
-### iOS
+## TimeZone API
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+To fetch timezones, I am using following free API:
+<a href="https://timezonedb.com/api?utm_source=chatgpt.com">TimezoneDB</a>
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## Offline Support
 
-```sh
-bundle install
+For this I'm using SQLite DB and NetInfo package. First, I'm checking either I'm connected to internet or not. If I'm than first check for timezones in local storage if they are present then fetch from local otherwie use API and save them in local storage.
+
+Similarly, if user is clicking on specific timezone to see its time, then I'm also using same SQLiteDB to store that value to persist on next launch.
+
+## Orientation Support
+
+For this, I didn't any library just put a simple if
+
+```
+if(mobileWidth > mobileHeight)
 ```
 
-Then, and every time you update your native dependencies, run:
+This means that mobile is in Landscape and now we can do whatever we want to our UI. In My case, it just change home screen main container flex direction from column to row or vice versa.
 
-```sh
-bundle exec pod install
+Make sure, you should add support for multiple orientation in your info.plist firl for iOS.
+
+# How you can run the code
+
+By following these simple steps you can run the code on your side. Here are these:
+
+## Step 1
+
+Clone the repo
+
+```
+git clone git@github.com:Haseeba393/analog-clock-assessment.git
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## Step 2
 
-```sh
-# Using npm
-npm run ios
+Install node modules and pods
 
-# OR using Yarn
-yarn ios
+```
+npm install
+cd ios && pod install
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Step 3
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Run on your desired platform by using following commands
 
-## Step 3: Modify your app
+```
+npm run android # For Android
+npm run ios # For iOS
+```
 
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# Thanks for reading the readme file. Please let me know if you have any suggestions or feedback. Thanks.
